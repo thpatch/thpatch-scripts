@@ -43,7 +43,7 @@ if __name__ == '__main__':
     % arg.game)
     for root, dirs, files in os.walk(arg.f):
         for fn in files:
-            if fn.endswith('.png') and not fn.startswith('bounds-'):
+            if (fn.endswith('.png') or fn.endswith('.jpg') or fn.endswith('.gif')) and not fn.startswith('bounds-'):
                 f_fn = os.path.join(root, fn)
                 game_fn = f_fn[len(arg.f) + 1:].replace('\\', '/')
                 wiki_fn = arg.game + "-" + game_fn.replace('/', '-')
