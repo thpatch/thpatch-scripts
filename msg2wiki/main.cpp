@@ -4,7 +4,7 @@
 // -----------------------
 // "©" Nmlgc, 2012-2017
 
-#include <parse.h>
+#include "parse.h"
 #include <shlwapi.h>
 
 size_t trans_block_num = 1;

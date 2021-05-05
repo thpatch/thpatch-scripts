@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.8)
+project(msg2wiki)
+add_executable(msg2wiki main.cpp msg2wiki.cpp msg2wiki.h parse.h)
+target_compile_definitions(msg2wiki PRIVATE UNICODE _UNICODE _CRT_SECURE_NO_WARNINGS)
+target_link_libraries(msg2wiki shlwapi)

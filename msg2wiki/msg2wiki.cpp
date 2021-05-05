@@ -4,7 +4,7 @@
 // -----------------------
 // "©" Nmlgc, 2012-2017
 
-#include <parse.h>
+#include "parse.h"
 #include <math.h>
 #include <Shlwapi.h>
 #include "msg2wiki.h"
@@ -380,17 +380,17 @@ int Process(char* fn, char* str, bool utf8)
 			if(ms.char_id != new_char)
 			{
 				table = CloseTable(table, ms.entry);
-				printf("==%s defeats $Char%02d$==\n{{%s/Header}}\n", side_desc[SIDE_P1], new_char, dialog_template);
+				wprintf(L"==%s defeats $Char%02d$==\n{{%s/Header}}\n", side_desc[SIDE_P1], new_char, dialog_template);
 			}
-			printf("{{%s|status|status=Message #%d}}\n", dialog_template, (ms.entry % 10) + 1);
+			wprintf(L"{{%s|status|status=Message #%d}}\n", dialog_template, (ms.entry % 10) + 1);
 		}
 		else if(ms.entry == 2)
 		{
-			printf("{{dt/Header}}\n");
+			wprintf(L"{{dt/Header}}\n");
 			current_file_has_3_entries = true;
 		}
 		else if(ms.entry == 0 && !current_file_has_3_entries) {
-			printf("{{dt/Header}}\n");
+			wprintf(L"{{dt/Header}}\n");
 		}
 		ms.char_id = new_char;
 		table = true;
@@ -524,28 +524,24 @@ int Process(char* fn, char* str, bool utf8)
 		}
 		break;
 
-	case 7:
+	case 7: {
+		SetVersion(10);
+		bool is_secondary = param[1] && atoi(param[1]) == 2;
+		return dt_soft.SetSide(is_secondary ? SIDE_P2 : SIDE_P1);
+	}
+#if 0 // had to remove pre-th10 support because of th18
 		if(!param[1]) 
 		{
 			SetVersion(10);
 			return dt_soft.SetSide(SIDE_P1);
 		}
 		else			return BGMChange(atoi(param[1]));
-
-	case 8:
+#endif
+	case 8: {
 		/*if(version >= 10)
 		{*/
-		if(param[1]) {
-			auto char_on_side = atoi(param[1]);
-			if(char_on_side == 2) {
-				return dt_soft.SetSide(SIDE_B2);
-			}
-			else {
-				return dt_soft.SetSide(SIDE_B1);
-			}
-		} else {
-			return dt_soft.SetSide(SIDE_B1);
-		}
+		bool is_secondary = param[1] && atoi(param[1]) == 2;
+		return dt_soft.SetSide(is_secondary ? SIDE_B2 : SIDE_B1);
 		/*}
 		else
 		{
@@ -563,6 +559,7 @@ int Process(char* fn, char* str, bool utf8)
 				return h1.SetLine( atoi(param[2]) != 0, str_utf16);
 			}
 		}*/
+	}
 	case 9:
 		if(param[1])
 		{
