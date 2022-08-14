@@ -43,6 +43,10 @@ wchar_t* GetSideDesc(wchar_t* str, int entry, msg_side side)
 	{
 		wsprintf(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
 	}
+	else if (side == SIDE_UNKNOWN)
+	{
+		str[0] = '\0';
+	}
 	else
 	{
 		wcscpy(str, side_desc[side]);
