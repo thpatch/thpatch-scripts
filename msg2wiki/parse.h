@@ -4,9 +4,9 @@
 // -----------------------
 // "©" Nmlgc, 2012
 
+#include <stdio.h>
 #include <windows.h>
 #include <malloc.h>
-#include <stdio.h>
 
 #ifdef WIN32
 #define snprintf _snprintf
@@ -28,3 +28,5 @@ extern size_t stage_num;
 
 // process function prototype
 int Process(char* fn, char* str, bool utf8);
+
+extern float version;

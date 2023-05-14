@@ -22,8 +22,11 @@ struct msg_state
 	int entry;	// entry number
 	int time;	// time_code;
 	int char_id;
+	// th19 stuff
+	int player;
+	int opponent;
+	int message_no;
 };
-
 // furigana
 struct msg_furi
 {
@@ -40,7 +43,7 @@ protected:
 	bool RenderAndClose_Base(const wchar_t* template_name, const wchar_t* add_params = L"");
 public:
 	int time;	// timecode of first line
-	wchar_t* type;	// template subtype
+	const wchar_t* type;	// template subtype
 
 	wchar_t line[4][MAX_LINE];
 	

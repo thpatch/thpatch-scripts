@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 		"<!--Optional message you want to include at the top of the page--></translate>\n"
 	);
 
-	for(stage_num = 1; stage_num < argc; stage_num++) {
+	for(stage_num = 1; (int)stage_num < argc; stage_num++) {
 		in = fopen(argv[stage_num], "r");
 		if(in) {
 			char* fn;
@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
 			if(!utf8)	fseek(in, 0, SEEK_SET);
 
 			printf("{{thcrap Patch file|%s}}\n", actual_fn);
-			printf("<translate>==Stage %d== <!--T:%d--></translate>\n", stage_num, trans_block_num++);
+			if (version != 19)
+				printf("<translate>==Stage %d== <!--T:%d--></translate>\n", stage_num, trans_block_num++);
 
 			while(fgets(line, 2048, in)) {
 				int len = strlen(line) - 1;
@@ -61,6 +62,9 @@ int main(int argc, char *argv[])
 				if(Process(fn, line, utf8))	break;
 			}
 			fclose(in);
+
+			if (version == 19)
+				wprintf(L"{{dt/Footer}}\n");
 		}
 	}
 

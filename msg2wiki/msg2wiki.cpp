@@ -6,8 +6,31 @@
 
 #include "parse.h"
 #include <math.h>
-#include <Shlwapi.h>
+#include <shlwapi.h>
 #include "msg2wiki.h"
+
+static const wchar_t* th19_names[20][2] = {
+	{ L"Reimu", L"Reimu Hakurei" },
+	{ L"Marisa", L"Marisa Kirisame" },
+	{ L"$pl02$", L"$pl02$" },
+	{ L"$pl03$", L"$pl03$" },
+	{ L"Aun", L"Aun Komano" },
+	{ L"Nazrin", L"Nazrin" },
+	{ L"Seiran", L"Seiran" },
+	{ L"$pl07$", L"$pl07$" },
+	{ L"$pl08$", L"$pl08$" },
+	{ L"$pl09$", L"$pl09$" },
+	{ L"$pl10$", L"$pl10$" },
+	{ L"$pl11$", L"$pl11$" },
+	{ L"$pl12$", L"$pl12$" },
+	{ L"$pl13$", L"$pl13$" },
+	{ L"$pl14$", L"$pl14$" },
+	{ L"$pl15$", L"$pl15$" },
+	{ L"$pl16$", L"$pl16$" },
+	{ L"$pl17$", L"$pl17$" },
+	{ L"$pl18$", L"$pl18$" },
+	{ L"anyone", L"anyone" },
+};
 
 const wchar_t* side_desc[] = {L"$Player$", L"$Assist$", L"$Boss1$", L"$Boss2$"};
 const wchar_t* dialog_template = L"dt";
@@ -22,7 +45,7 @@ int boss_known = 0;
 int boss_presence = 0;
 
 // Detected game version
-float version = -1.0f;
+float version = 19.0f; // FIXME:
 
 float FONT_WIDTH = 16.0f;
 
@@ -39,9 +62,13 @@ float SetVersion(const float new_ver)
 
 wchar_t* GetSideDesc(wchar_t* str, int entry, msg_side side)
 {
-	if(side >= SIDE_B1)
+	if(version == 19)
 	{
-		wsprintf(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
+		wcscpy(str, th19_names[side >= SIDE_B1 ? ms.opponent : ms.player][0]);
+	}
+	else if(side >= SIDE_B1)
+	{
+		wsprintfW(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
 	}
 	else if (side == SIDE_UNKNOWN)
 	{
@@ -74,7 +101,7 @@ bool Table::RenderAndClose_Base(const wchar_t* dialog_template, const wchar_t* a
 
 	if(line[0][0] == 0 && line[1][0] == 0)	return 1;
 
-	wsprintf(prolog, L"{{%s%s|code=#%d@%d|tl=", dialog_template, add_params, ms.entry, time);
+	wsprintfW(prolog, L"{{%s%s|code=#%d@%d|tl=", dialog_template, add_params, ms.entry, time);
 
 	WideCharToMultiByte(CP_UTF8, 0, prolog, -1, lineconv, 1024, NULL, NULL);
 
@@ -82,7 +109,7 @@ bool Table::RenderAndClose_Base(const wchar_t* dialog_template, const wchar_t* a
 
 	for(i = 0; i < 4; i++) {
 		if(line[i][0]) {
-			WideCharToMultiByte(CP_UTF8, 0, line[i], -1, lineconv, 1024, NULL, NULL);	
+			WideCharToMultiByte(CP_UTF8, 0, line[i], -1, lineconv, 1024, NULL, NULL);
 			if(i != 0) {
 				printf("\n");
 			}
@@ -114,7 +141,7 @@ bool Table::RenderAndClose()
 		wchar_t* str;
 		str = (wchar_t*)alloca(str_len * sizeof(wchar_t));
 
-		wsprintf(str, L"%s|%s", dialog_template, type);
+		wsprintfW(str, L"%s|%s", dialog_template, type);
 		return RenderAndClose_Base(str);
 	}
 }
@@ -153,9 +180,9 @@ bool DialogTable::SetLine(const wchar_t* str)
 		if(this->side[linenum] == SIDE_P2) {
 			wcscpy(side, this->assist);
 		}
-		wsprintf(
+		wsprintfW(
 			set_str, L"<translate><!--T:%d%s%s-->\n", trans_block_num++,
-			side[0] != '\0' ? L"_" : L"", side
+			side[0] != '\0' ? L" " : L"", side
 		);
 	}
 	wcscat(set_str, str);
@@ -226,18 +253,18 @@ bool DialogTable::RenderAndClose()
 		if(assist[0] == 0)
 		{
 			if(is_ending) {
-				len += wnsprintf(str, 256, L"|nochar");
+				len += wnsprintfW(str, 256, L"|nochar");
 			} else {
-				len += wnsprintf(str, 256, L"|side=%d|char=", side[0] >= SIDE_B1);
+				len += wnsprintfW(str, 256, L"|side=%d|char=", side[0] >= SIDE_B1);
 				GetSideDesc(str + len, ms.entry, side[0]);
 			}
 		}
 		else
 		{
 			if(is_ending) {
-				wnsprintf(str, 256, L"|tabchar|char=%s", assist);
+				wnsprintfW(str, 256, L"|tabchar|char=%s", assist);
 			} else {
-				wnsprintf(str, 256, L"|assist|side=%d|char=%s",
+				wnsprintfW(str, 256, L"|assist|side=%d|char=%s",
 					side[0] >= SIDE_B1, assist);
 			}
 
@@ -246,7 +273,7 @@ bool DialogTable::RenderAndClose()
 	}
 	else
 	{
-		len = wnsprintf(str, 256, L"|char=%s<br/>", side_desc[side[0]]);
+		len = wnsprintfW(str, 256, L"|char=%s<br/>", side_desc[side[0]]);
 		GetSideDesc(str + len, ms.entry, side[1]);
 	}
 	wcscat(str, add_param);
@@ -366,16 +393,17 @@ int Process(char* fn, char* str, bool utf8)
 	str = trim_begin(str);
 	ms.fn = fn;
 
+	// th19 stuff
+	if(!strncmp("header", str, 6)) {
+		return 0;
+	}
+
 	// Parse entry number
 	if(!strncmp("entry", str, 5))
 	{
 		int new_char = -1;
-		char* str_entry = strtok(str, " ");
-		if(str_entry)
-		{
-			ms.entry = atoi(strtok(NULL, str_entry));
-			new_char = ms.entry / 10;
-		}
+		ms.entry = atoi(str+5);
+		new_char = ms.entry / 10;
 
 		if(ms.char_id != new_char)	boss_known = false;
 
@@ -387,6 +415,32 @@ int Process(char* fn, char* str, bool utf8)
 				wprintf(L"==%s defeats $Char%02d$==\n{{%s/Header}}\n", side_desc[SIDE_P1], new_char, dialog_template);
 			}
 			wprintf(L"{{%s|status|status=Message #%d}}\n", dialog_template, (ms.entry % 10) + 1);
+		}
+		else if(version == 19)
+		{
+			sscanf(fn, "pl%d", &ms.player);
+			int a,b,c,d;
+			sscanf(str, "entry%d (%d ,%d ,%d ,%d )", &ms.entry, &a, &b, &c, &d);
+			if(ms.opponent != b) {
+				table = CloseTable(table, 1);
+				wprintf(L"=={{int:versus|%s}}==\n", th19_names[b][1]);
+				wprintf(L"{{dt/Header}}\n");
+				ms.opponent = b;
+				ms.message_no = 0;
+			}
+			if (strstr(fn, "vs"))
+				d = 1;
+			switch (d) {
+			case 0:
+				wprintf(L"{{dt/status|status=story_vs_message_number|%d}}\n", ++ms.message_no);
+				break;
+			case 1:
+				wprintf(L"{{dt/status|status=story_vs_win|%s}}\n", th19_names[ms.player][0]);
+				break;
+			case 2:
+				wprintf(L"{{dt/status|status=story_vs_lose|%s}}\n", th19_names[ms.player][0]);
+				break;
+			}
 		}
 		else if(ms.entry == 2)
 		{
@@ -435,7 +489,7 @@ int Process(char* fn, char* str, bool utf8)
 		BossDefeat();
 		dt_hard.RenderAndClose();
 		dt_soft.RenderAndClose();
-		if( !(9 == version && strstr(fn, "match")) ) table = CloseTable(table, ms.entry);
+		if( !(9 == version && strstr(fn, "match")) && version != 19 ) table = CloseTable(table, ms.entry);
 		break;
 
 	// th128 Char Bank Switching
@@ -508,14 +562,14 @@ int Process(char* fn, char* str, bool utf8)
 
 	case 1:
 		if( !(version == 9 && atoi(param[1]) == 1) )	break;
-
+		// fallthrough
 	case 6:
 		// TH10+ endings: Next page
 		if(is_ending && version >= 10) {
 			wprintf(L"{{%s|h1}}\n", dialog_template);
 		}
 		if(version < 10)	return BossEnter();
-		if(version = 100) {
+		if(version == 100) {
 			// Ending page wipe
 			dt_soft.RenderAndClose();
 			// h1.SetLine(0, L" ");
@@ -527,6 +581,13 @@ int Process(char* fn, char* str, bool utf8)
 			dt_soft.RenderAndClose();
 		}
 		break;
+
+	case 42:
+		SetVersion(19);
+		return dt_soft.SetSide(SIDE_P1);
+	case 43:
+		SetVersion(19);
+		return dt_soft.SetSide(SIDE_B1);
 
 	case 7: {
 		SetVersion(10);
@@ -592,6 +653,7 @@ int Process(char* fn, char* str, bool utf8)
 			SetVersion(11);
 			break;
 		}
+		// fallthrough
 	case 12:
 		if(version >= 10 && (!param[1]))
 		{
@@ -617,6 +679,7 @@ int Process(char* fn, char* str, bool utf8)
 			return dt_soft.SetSide(side);
 		}
 		// Fall through if th10<
+		// fallthrough
 	case 16:
 		dt_hard.RenderAndClose();
 		temp_str = strchr(str, ';') + 1;
@@ -636,7 +699,7 @@ int Process(char* fn, char* str, bool utf8)
 		{
 			if(dt_soft.assist[0] == 0)
 			{
-				if(temp_utf16 = wcspbrk(str_utf16, OpenBrackets))
+				if((temp_utf16 = wcspbrk(str_utf16, OpenBrackets)))
 				{
 					c = temp_utf16 - str_utf16;
 					wcsncpy(dt_soft.assist, str_utf16, c);
@@ -683,6 +746,7 @@ int Process(char* fn, char* str, bool utf8)
 			else				return BGMChange();
 		}
 		// fall through if th08
+		// fallthrough
 	case 20:
 		// th11 Boss Title
 		if(version > 10)
@@ -696,6 +760,7 @@ int Process(char* fn, char* str, bool utf8)
 			if(param[1])	return st_desc.SetLine( (op - 19) != 0, str_utf16);
 		}
 
+		// fallthrough
 	case 23:
 		if(version == 10)	return BossLeave();
 		break;
