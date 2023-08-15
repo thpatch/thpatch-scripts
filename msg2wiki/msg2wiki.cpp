@@ -32,6 +32,8 @@ static const wchar_t* th19_names[20][2] = {
 	{ L"anyone", L"anyone" },
 };
 
+bool is_enemy_winning = false;
+
 const wchar_t* side_desc[] = {L"$Player$", L"$Assist$", L"$Boss1$", L"$Boss2$"};
 const wchar_t* dialog_template = L"dt";
 const wchar_t* ruby_template = L"ruby-ja";
@@ -432,12 +434,15 @@ int Process(char* fn, char* str, bool utf8)
 				d = 1;
 			switch (d) {
 			case 0:
+				is_enemy_winning = false;
 				wprintf(L"{{dt/status|status=story_vs_message_number|%d}}\n", ++ms.message_no);
 				break;
 			case 1:
+				is_enemy_winning = false;
 				wprintf(L"{{dt/status|status=story_vs_win|%s}}\n", th19_names[ms.player][0]);
 				break;
 			case 2:
+				is_enemy_winning = true;
 				wprintf(L"{{dt/status|status=story_vs_lose|%s}}\n", th19_names[ms.player][0]);
 				break;
 			}
@@ -584,8 +589,11 @@ int Process(char* fn, char* str, bool utf8)
 
 	case 42:
 		SetVersion(19);
-		return dt_soft.SetSide(SIDE_P1);
+		return dt_soft.SetSide(is_enemy_winning ? SIDE_B1 : SIDE_P1);
 	case 43:
+		SetVersion(19);
+		return dt_soft.SetSide(is_enemy_winning ? SIDE_P1 : SIDE_B1);
+	case 55:
 		SetVersion(19);
 		return dt_soft.SetSide(SIDE_B1);
 
