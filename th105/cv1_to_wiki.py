@@ -62,7 +62,9 @@ char_name_fix = {
 	"meirin": "meiling",
 }
 if char_name in char_name_fix:
-	char_name = char_name_fix[char_name]
+	char_name_mw = char_name_fix[char_name]
+else:
+	char_name_mw = char_name
 
 char_name_full = {
 	"common": "Common",
@@ -87,7 +89,7 @@ char_name_full = {
 	"utsuho": "Utsuho Reiuji",
 	"suwako": "Suwako Moriya",
 	"namazu": "Giant Catfish",
-}[char_name]
+}[char_name_mw]
 
 with open(sys.argv[1], 'r', encoding="shift_jis") as fd:
 	file = fd.read()
@@ -99,7 +101,8 @@ with open(sys.argv[1], 'r', encoding="shift_jis") as fd:
 		id = line[0]
 		name = line[1]
 		comment = split_comment(line[4])
-		id_full = "{}-{}".format(char_name, id)
+		id_full    = "{}-{}".format(char_name,    id)
+		id_full_mw = "{}-{}".format(char_name_mw, id)
 
 		if state == State.START:
 			print("{{Spell Card/Section|{{int|Skill cards}}}}")
@@ -108,9 +111,11 @@ with open(sys.argv[1], 'r', encoding="shift_jis") as fd:
 			print("{{Spell Card/Section|{{int|Spell cards}}}}")
 			state = State.SPELL_CARD
 
-		if id_full in ignore_cards_list and ignore_cards_list[id_full] == name:
+		if id_full    in ignore_cards_list and ignore_cards_list[id_full]    == name:
+			continue
+		if id_full_mw in ignore_cards_list and ignore_cards_list[id_full_mw] == name:
 			continue
 
-		print("{{{{Spell Card|id={}|name=<translate><!--T:{}-->".format(id_full, id_full))
-		print("{}</translate>|owner={}|comment_1=<translate><!--T:{}-comment-->".format(name, char_name_full, id_full))
+		print("{{{{Spell Card|id={}|name=<translate><!--T:{}-->".format(id_full, id_full_mw))
+		print("{}</translate>|owner={}|comment_1=<translate><!--T:{}-comment-->".format(name, char_name_full, id_full_mw))
 		print("{}</translate>}}}}".format(comment))
