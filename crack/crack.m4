@@ -27,7 +27,8 @@ params(`th12',    0xD7000,  0x1540,    0x0,    0x0, eax, 3)
 params(`th18',   0x172000,  0x1BF0,    0x0,    0x0, eax, 4)
 params(`th095',   0xE7000,  0x1160,    0x0,    0x0, eax, 4)
 params(`th185',  0x17B000,  0x1C00,    0x0,    0x0, eax, 5)
-params(`th19',   0x21B000, 0x14F24,    0x0,    0x0, eax, 5)
+params(`th19',   0x21B000, 0x14F24,    0x0,    0x0, eax, 5) dnl v1.00a
+params(`th19a',  0x23C000, 0x17788,    0x0,    0x0, eax, 6) dnl v1.10c
 dnl
 params(`th08',  0x14DB000,   0xD60,       ,       , eax,  )
 params(`th07',   0xF66000,   0x960,       ,       , eax,  )
@@ -38,6 +39,7 @@ drmp(`drmp_v2', 0x6780, 0x0B)
 drmp(`drmp_v3', 0x66D0, 0x13) dnl 3d12683b7333bf386de6293c3104e302
 drmp(`drmp_v4', 0x3EA0, 0x0B) dnl 9efaf598c56172deffb12919e1dd5035 719dfa70529f71adcda2fb5a7476ef12
 drmp(`drmp_v5', 0x3E70, 0x0B) dnl 8795444ebf02dbaad5dc2d76b8243eb5 c49397e378fb21b77f14a64cc0962ab3
+drmp(`drmp_v6', 0x3D50, 0x0B) dnl bcca22165ad6908348793ca4511086cc
 dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl
 define(`rsrc_size',((rsrc_size+0xFFF)&~0xFFF))
 define(`ofs1',(0x1413+fixup1))
