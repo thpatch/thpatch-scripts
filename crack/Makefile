@@ -35,5 +35,7 @@ check:
 	@-$(DIFF) <(m4 -Dth095 crack.m4) <($(SEDFILT) nmlgc/base_tsa/th095.v1.02a.js)
 	@-echo -------------------------------- th185
 	@-$(DIFF) <(m4 -Dth185 crack.m4) <($(SEDFILT) nmlgc/base_tsa/th185.v1.00a.js)
-	@-echo -------------------------------- th19
+	@-echo -------------------------------- th19 v1.00a
 	@-$(DIFF) <(m4 -Dth19 crack.m4) <($(SEDFILT) nmlgc/base_tsa/th19.v1.00a.js)
+	@-echo -------------------------------- th19 v1.10c
+	@-$(DIFF) <(m4 -Dth19a crack.m4) <($(SEDFILT) nmlgc/base_tsa/th19.v1.10c.js)
