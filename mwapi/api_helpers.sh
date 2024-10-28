@@ -1,5 +1,4 @@
-# TODO: you must set the username and password variables to your username and
-# password in order to use most functions here.
+source $(dirname "$0")/credentials.sh
 
 url_api=https://www.thpatch.net/w/api.php
 echo > token.txt
@@ -20,8 +19,8 @@ function thpatch_login
 
     ret=$(curl_post --data-urlencode action=clientlogin --data-urlencode "username=$username" --data-urlencode "password=$password" --data-urlencode "logintoken=$(cat token.txt)" --data-urlencode 'loginreturnurl=http://example.org/')
     if [ "$(echo "$ret" | jq -r .clientlogin.status)" != "PASS" ]; then
-        echo "FATAL ERROR: login failed"
-        echo "$ret" | jq .
+        echo "FATAL ERROR: login failed" >&2
+        echo "$ret" | jq --color-output . >&2
         exit 1
     fi
 
