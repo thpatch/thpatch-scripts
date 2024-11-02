@@ -46,6 +46,7 @@ if __name__ == '__main__':
             if (fn.endswith('.png') or fn.endswith('.jpg') or fn.endswith('.gif')) and not fn.startswith('bounds-'):
                 f_fn = os.path.join(root, fn)
                 game_fn = f_fn[len(arg.f) + 1:].replace('\\', '/')
+                tlunit = game_fn.replace('/', ' ')
                 wiki_fn = arg.game + "-" + game_fn.replace('/', '-')
                 if arg.t:
                     t_fn = os.path.join(arg.t, wiki_fn)
@@ -64,7 +65,7 @@ if __name__ == '__main__':
 |transcription=<translate><!--T:%s-->
 Please add a transcription by editing the corresponding section on the root page ([[%s]])!
 </translate>
-}}""" % (game_fn, game_fn, arg.game + "/Images")
+}}""" % (game_fn, tlunit, arg.game + "/Images")
     )
         
     # Footer
