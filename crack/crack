@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+test crack.m4 -nt crack.sh && m4 crack.m4 > crack.sh
+exec bash -- crack.sh "$@"
