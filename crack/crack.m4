@@ -4,40 +4,39 @@ dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl dnl
 define([GAMES])dnl
 define([GAMEPARAMS], [dnl
 define([GAMES],GAMES[ $1])dnl
-define([RSRC_END],[($2+(($3+0xFFF)&~0xFFF))])dnl
-define([ADDR],[eval(RSRC_END+$][1,16)])dnl
+define([BIND_BASE],[($2+(($3+0xFFF)&~0xFFF))])dnl
 		$1) dnl
-ofs1="ADDR(0x1413+$4)" dnl
-ofs2="ADDR(0x2036+$5)" dnl
-ofs3="ADDR(0x333)" dnl
-module_reg="$6" dnl
-jsfile="$8"; dnl
-setdrmpparams "$7" ;;])dnl
+ofs1="eval(BIND_BASE+$4, 16)" dnl
+ofs2="eval(BIND_BASE+$5, 16)" dnl
+ofs3="eval(BIND_BASE+$6, 16)" dnl
+module_reg="$7" dnl
+jsfile="$9"; dnl
+setdrmpparams "$8" ;;])dnl
 function setgameparams {
 	case "$1" in
-dnl        $1            $2       $3      $4      $5   $6 $7  $8
-dnl        name    rsrc_base   _size  fixup1 fixup2 modreg drmp  jsfile
-GAMEPARAMS(th16,    0xE1000,  0x17F8, -0x8A0, -0xF7F, ebx, 3, th16.v1.00a.js)
-GAMEPARAMS(th165,  0x110000,  0x1808,   0x10,   0x10, eax, 1, th165.v1.00a.js)
-GAMEPARAMS(th143,  0x143000,  0x1550,   0x10,   0x10, eax, 2, th143.v1.00a.js)
-GAMEPARAMS(th15,   0x123000,  0x1758,   0x10,   0x10, eax, 2, th15.v1.00b.js)
-GAMEPARAMS(th17tr, 0x127000,  0x13F8,    0x0,    0x0, eax, 2, th17.v0.01a.js)
-GAMEPARAMS(th13,    0xE7000,  0x1540,    0x0,    0x0, eax, 3, th13.v1.00c.js)
-GAMEPARAMS(th14,    0xFF000,  0x1548,    0x0,    0x0, eax, 3, th14.v1.00b.js)
-GAMEPARAMS(th125,   0xDB000,  0x1544,    0x0,    0x0, eax, 3, th125.v1.00a.js)
-GAMEPARAMS(th128,   0xDD000,  0x1540,    0x0,    0x0, eax, 3, th128.v1.00a.js)
-GAMEPARAMS(th17,   0x12B000,  0x13F8,    0x0,    0x0, eax, 3, th17.v1.00b.js)
-GAMEPARAMS(th10,    0x9A000,  0x12E0,    0x0,    0x0, eax, 3, th10.v1.00a.js)
-GAMEPARAMS(th11,    0xCB000,  0x1540,    0x0,    0x0, eax, 3, th11.v1.00a.js)
-GAMEPARAMS(th12,    0xD7000,  0x1540,    0x0,    0x0, eax, 3, th12.v1.00b.js)
-GAMEPARAMS(th18,   0x172000,  0x1BF0,    0x0,    0x0, eax, 4, th18.v1.00a.js)
-GAMEPARAMS(th095,   0xE7000,  0x1160,    0x0,    0x0, eax, 4, th095.v1.02a.js)
-GAMEPARAMS(th185,  0x17B000,  0x1C00,    0x0,    0x0, eax, 5, th185.v1.00a.js)
-GAMEPARAMS(th19,   0x21B000, 0x14F24,    0x0,    0x0, eax, 5, th19.v1.00a.js)
-GAMEPARAMS(th19a,  0x23C000, 0x17788,    0x0,    0x0, eax, 6, th19.v1.10c.js)
-dnl GAMEPARAMS(th08,  0x14DB000,   0xD60,       ,       , eax,  , th08.v1.00d.js)
-dnl GAMEPARAMS(th07,   0xF66000,   0x960,       ,       , eax,  , th07.v1.00b.js)
-dnl GAMEPARAMS(th06,   0x2E8000,   0x960,       ,       , eax,  , th06.v1.02h.js)
+dnl        $1            $2       $3      $4      $5     $6   $7 $8  $9
+dnl        name    rsrc_base   _size    ofs1    ofs2 ofs3 modreg drmp jsfile
+GAMEPARAMS(th16,    0xE1000,  0x17F8,  0xB73, 0x10B7, 0x333, ebx, 3, th16.v1.00a.js)
+GAMEPARAMS(th165,  0x110000,  0x1808, 0x1423, 0x2046, 0x333, eax, 1, th165.v1.00a.js)
+GAMEPARAMS(th143,  0x143000,  0x1550, 0x1423, 0x2046, 0x333, eax, 2, th143.v1.00a.js)
+GAMEPARAMS(th15,   0x123000,  0x1758, 0x1423, 0x2046, 0x333, eax, 2, th15.v1.00b.js)
+GAMEPARAMS(th17tr, 0x127000,  0x13F8, 0x1413, 0x2036, 0x333, eax, 2, th17.v0.01a.js)
+GAMEPARAMS(th13,    0xE7000,  0x1540, 0x1413, 0x2036, 0x333, eax, 3, th13.v1.00c.js)
+GAMEPARAMS(th14,    0xFF000,  0x1548, 0x1413, 0x2036, 0x333, eax, 3, th14.v1.00b.js)
+GAMEPARAMS(th125,   0xDB000,  0x1544, 0x1413, 0x2036, 0x333, eax, 3, th125.v1.00a.js)
+GAMEPARAMS(th128,   0xDD000,  0x1540, 0x1413, 0x2036, 0x333, eax, 3, th128.v1.00a.js)
+GAMEPARAMS(th17,   0x12B000,  0x13F8, 0x1413, 0x2036, 0x333, eax, 3, th17.v1.00b.js)
+GAMEPARAMS(th10,    0x9A000,  0x12E0, 0x1413, 0x2036, 0x333, eax, 3, th10.v1.00a.js)
+GAMEPARAMS(th11,    0xCB000,  0x1540, 0x1413, 0x2036, 0x333, eax, 3, th11.v1.00a.js)
+GAMEPARAMS(th12,    0xD7000,  0x1540, 0x1413, 0x2036, 0x333, eax, 3, th12.v1.00b.js)
+GAMEPARAMS(th18,   0x172000,  0x1BF0, 0x1413, 0x2036, 0x333, eax, 4, th18.v1.00a.js)
+GAMEPARAMS(th095,   0xE7000,  0x1160, 0x1413, 0x2036, 0x333, eax, 4, th095.v1.02a.js)
+GAMEPARAMS(th185,  0x17B000,  0x1C00, 0x1413, 0x2036, 0x333, eax, 5, th185.v1.00a.js)
+GAMEPARAMS(th19,   0x21B000, 0x14F24, 0x1413, 0x2036, 0x333, eax, 5, th19.v1.00a.js)
+GAMEPARAMS(th19a,  0x23C000, 0x17788, 0x1413, 0x2036, 0x333, eax, 6, th19.v1.10c.js)
+dnl GAMEPARAMS(th08,  0x14DB000,   0xD60,       ,       ,      , eax,  , th08.v1.00d.js)
+dnl GAMEPARAMS(th07,   0xF66000,   0x960,       ,       ,      , eax,  , th07.v1.00b.js)
+dnl GAMEPARAMS(th06,   0x2E8000,   0x960,       ,       ,      , eax,  , th06.v1.02h.js)
 		*)
 			echo "unknown game $1"
 			exit 1
