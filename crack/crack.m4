@@ -34,6 +34,7 @@ GAMEPARAMS(th095,   0xE7000,  0x1160, 0x1413, 0x2036, 0x333, eax, 4, th095.v1.02
 GAMEPARAMS(th185,  0x17B000,  0x1C00, 0x1413, 0x2036, 0x333, eax, 5, th185.v1.00a.js)
 GAMEPARAMS(th19,   0x21B000, 0x14F24, 0x1413, 0x2036, 0x333, eax, 5, th19.v1.00a.js)
 GAMEPARAMS(th19a,  0x23C000, 0x17788, 0x1413, 0x2036, 0x333, eax, 6, th19.v1.10c.js)
+GAMEPARAMS(th20,   0x1E9000,  0xF210, 0x1413, 0x2036, 0x333, eax, 7, th20.v1.00a.js)
 dnl GAMEPARAMS(th08,  0x14DB000,   0xD60,       ,       ,      , eax,  , th08.v1.00d.js)
 dnl GAMEPARAMS(th07,   0xF66000,   0x960,       ,       ,      , eax,  , th07.v1.00b.js)
 dnl GAMEPARAMS(th06,   0x2E8000,   0x960,       ,       ,      , eax,  , th06.v1.02h.js)
@@ -54,6 +55,7 @@ DRMPPARAMS(3, 0x66D0, 0x13) # 3d12683b7333bf386de6293c3104e302
 DRMPPARAMS(4, 0x3EA0, 0x0B) # 9efaf598c56172deffb12919e1dd5035 719dfa70529f71adcda2fb5a7476ef12
 DRMPPARAMS(5, 0x3E70, 0x0B) # 8795444ebf02dbaad5dc2d76b8243eb5 c49397e378fb21b77f14a64cc0962ab3
 DRMPPARAMS(6, 0x3D50, 0x0B) # bcca22165ad6908348793ca4511086cc
+DRMPPARAMS(7, 0x3E6E, 0x0B) # dbc74aa216df9d8d2e2276c41b48fdd1
 		*)
 			echo "unknown drmp $1"
 			exit 1
