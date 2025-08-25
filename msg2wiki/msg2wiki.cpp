@@ -32,6 +32,33 @@ static const wchar_t* th19_names[20][2] = {
 	{ L"anyone", L"anyone" },
 };
 
+/*
+static const wchar_t* th20_names[] = {
+	L"Ubame",
+	L"Chimi",
+	L"Nareko",
+	L"Asama",
+	L"Toyohime",
+	L"Ariya",
+};
+static const wchar_t* th20_names_long[] = {
+	L"Ubame Chirizuka",
+	L"Chimi Houjuu",
+	L"Nareko Michigami",
+	L"Asama Yuiman",
+	L"Toyohime Watatsuki",
+	L"Ariya Iwanaga",
+};
+*/
+static const wchar_t* th20_names[] = {
+	L"Nina",
+};
+static const wchar_t* th20_names_long[] = {
+	L"Nina Watari",
+};
+static const wchar_t *g_bossname = nullptr;
+static const wchar_t *g_bossname_long = nullptr;
+
 bool is_enemy_winning = false;
 
 const wchar_t* side_desc[] = {L"$Player$", L"$Assist$", L"$Boss1$", L"$Boss2$"};
@@ -47,7 +74,7 @@ int boss_known = 0;
 int boss_presence = 0;
 
 // Detected game version
-float version = 19.0f; // FIXME:
+float version = 18.0f; // FIXME:
 
 float FONT_WIDTH = 16.0f;
 
@@ -68,9 +95,11 @@ wchar_t* GetSideDesc(wchar_t* str, int entry, msg_side side)
 	{
 		wcscpy(str, th19_names[side >= SIDE_B1 ? ms.opponent : ms.player][0]);
 	}
-	else if(side >= SIDE_B1)
+	else if(side >= 1 /* SIDE_B1 */)
 	{
-		wsprintfW(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
+		// wsprintfW(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
+		wcscpy(str, g_bossname);
+		// wsprintfW(str, L"$Boss#%d_%d_%d$", stage_num, entry, side);
 	}
 	else if (side == SIDE_UNKNOWN)
 	{
@@ -183,6 +212,7 @@ bool DialogTable::SetLine(const wchar_t* str)
 			wcscpy(side, this->assist);
 		}
 		wsprintfW(
+			// set_str, L"<translate><!--T:%d %d%s%s-->\n", stage_num, trans_block_num++,
 			set_str, L"<translate><!--T:%d%s%s-->\n", trans_block_num++,
 			side[0] != '\0' ? L" " : L"", side
 		);
@@ -294,12 +324,12 @@ bool BossLongMsg(const wchar_t* msg)
 	if(is_ending) {
 		return 0;
 	}
-	wprintf(L"{{%s/status_iw|status=story_char_%s|$BossLong#%d_%d", dialog_template, msg, stage_num, ms.entry);
+	wprintf(L"{{%s/status_iw|status=story_char_%s|%s", dialog_template, msg, g_bossname_long);
 	if(version == 9)
 	{
 		printf(" #%02d", ms.char_id);
 	}
-	printf("$}}\n");
+	printf("}}\n");
 	return 0;
 }
 
@@ -333,7 +363,7 @@ bool BGMChange(int song_id = 0)
 	}
 	if(song_id == -1)	wprintf(L"{{%s/bgm|none}}\n", dialog_template);
 	// else if(song_id==0)			wprintf(L"{{%s/bgm|th%02d_%02d}}\n", dialog_template, (int)version, song_id);
-	else if(song_id==0)			wprintf(L"{{%s/bgm|th16_%02d}}\n", dialog_template, stage_num * 2 + 1);
+	else if(song_id==0)			wprintf(L"{{%s/bgm|th20_%02d}}\n", dialog_template, stage_num * 2 + 1);
 	return 0;
 }
 
@@ -373,6 +403,9 @@ wchar_t* trim_begin(wchar_t* str)
 // Main loop
 int Process(char* fn, char* str, bool utf8)
 {
+	g_bossname = th20_names[stage_num - 1];
+	g_bossname_long = th20_names_long[stage_num - 1];
+
 	// Dialog table w/ "hard" line access. Used by th06, th07, and with a few lines of th08.
 	static DialogTable dt_hard;
 

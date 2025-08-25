@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 	fwrite(utf8bom, 3, 1, stdout);
 	printf(
 		"<languages />\n"
+		"{{#vardefine:game|th20}}\n"
 		"<translate><!--T:0-->\n"
 		"<!--Optional message you want to include at the top of the page--></translate>\n"
 	);
@@ -47,9 +48,12 @@ int main(int argc, char *argv[])
 			utf8 = memcmp(line, utf8bom, 3) == 0;
 			if(!utf8)	fseek(in, 0, SEEK_SET);
 
-			printf("{{thcrap Patch file|%s}}\n", actual_fn);
+			trans_block_num = 1;
+			/*
 			if (version != 19)
-				printf("<translate>==Stage %d== <!--T:%d--></translate>\n", stage_num, trans_block_num++);
+				printf("<translate>==Stage %d== <!--T:%d %d--></translate>\n", stage_num, stage_num, trans_block_num++);
+			*/
+			printf("{{thcrap Patch file|%s}}\n", actual_fn);
 
 			while(fgets(line, 2048, in)) {
 				int len = strlen(line) - 1;
