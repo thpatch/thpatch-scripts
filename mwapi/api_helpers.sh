@@ -5,12 +5,12 @@ echo > token.txt
 
 function curl_get
 {
-    curl --no-progress-meter --retry 5 -b cookies.txt -c cookies.txt "$url_api?format=json&$1"
+    curl --no-progress-meter --retry 5 -b cookies.txt -c cookies.txt -A 'thpatch_api_script' "$url_api?format=json&$1"
 }
 
 function curl_post
 {
-    curl --no-progress-meter --retry 5 -b cookies.txt -c cookies.txt "$url_api" --data-urlencode format=json "$@"
+    curl --no-progress-meter --retry 5 -b cookies.txt -c cookies.txt -A 'thpatch_api_script' "$url_api" --data-urlencode format=json "$@"
 }
 
 function thpatch_login
