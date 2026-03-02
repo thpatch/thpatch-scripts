@@ -81,6 +81,20 @@ function thpatch_delete
 }
 
 # Usage:
+# thpatch_delete_from_url page_url additional_parameters
+function thpatch_delete_from_url
+{
+	title=$(echo "$1" | sed -e 's|^https://www.thpatch.net/wiki/||')
+	shift
+
+    ret=$(thpatch_csrf --data-urlencode action=delete --data-urlencode "title=$title" "$@")
+    if [ "$(echo "$ret" | jq -r .delete)" = "null" ]; then
+        echo "ERROR removing page $title"
+        echo "$ret" | jq .
+    fi
+}
+
+# Usage:
 # thpatch_search something
 # You can add more arguments.
 # For example:
